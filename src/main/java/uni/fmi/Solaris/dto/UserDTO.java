@@ -1,12 +1,14 @@
 package uni.fmi.Solaris.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uni.fmi.Solaris.models.User;
 
 import java.time.LocalDateTime;
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDTO extends BaseDTO<User>{
     private String name;
     private String password;
