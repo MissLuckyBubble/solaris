@@ -64,7 +64,7 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public boolean delete(long id) {
+    public boolean remove(long id) {
         Optional<Category> optionalCategory = categoryRepo.findById(id);
         if(optionalCategory.isPresent()){
             categoryRepo.delete(optionalCategory.get());

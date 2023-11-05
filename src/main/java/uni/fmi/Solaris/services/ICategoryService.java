@@ -16,5 +16,5 @@ public interface ICategoryService {
 
     CategoryDTO create(CategoryDTO categoryDTO);
     CategoryDTO update(CategoryDTO categoryDTO);
-    boolean delete(long id);
+    boolean remove(long id);
 }
