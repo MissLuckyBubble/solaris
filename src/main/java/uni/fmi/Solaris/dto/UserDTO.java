@@ -1,5 +1,6 @@
 package uni.fmi.Solaris.dto;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +24,7 @@ public class UserDTO extends BaseDTO<User>{
     }
 
     @Override
-    public BaseDTO<User> convertToDTO(User entity) {
+    public void convertToDTO(User entity) {
         setName(entity.getName());
         setId(entity.getId());
         setActive(entity.isActive());
@@ -32,6 +33,5 @@ public class UserDTO extends BaseDTO<User>{
         setCreatedAt(entity.getCreatedAt());
         setLastLoggedAt(entity.getLastLoggedAt());
         setPhone(entity.getPhone());
-        return this;
     }
 }

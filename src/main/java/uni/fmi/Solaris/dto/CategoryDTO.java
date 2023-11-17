@@ -1,31 +1,26 @@
 package uni.fmi.Solaris.dto;
 
+import lombok.NoArgsConstructor;
 import uni.fmi.Solaris.models.Category;
 
 import java.util.List;
+@NoArgsConstructor
+public class CategoryDTO extends BaseDTO<Category> {
 
-public class CategoryDTO {
-    private long id;
     private String name;
     private CategoryDTO parent;
     private List<CategoryDTO> children;
     private int vatPercent;
 
-    public CategoryDTO() {
-    }
     public CategoryDTO(Category category) {
-        this.id = category.getId();
-        this.name = category.getName();
-        this.vatPercent = category.getVatPercent();
+        super(category);
     }
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    @Override
+    protected void convertToDTO(Category entity) {
+        this.setId(entity.getId());
+        this.name = entity.getName();
+        this.vatPercent = entity.getVatPercent();
     }
 
     public String getName() {

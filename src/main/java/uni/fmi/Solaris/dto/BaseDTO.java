@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uni.fmi.Solaris.models.MainModel;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +15,6 @@ public abstract class BaseDTO<U extends MainModel> {
         convertToDTO(entity);
     }
 
-    public abstract BaseDTO<U> convertToDTO(U entity);
+    protected abstract void convertToDTO(U entity);
 
 }

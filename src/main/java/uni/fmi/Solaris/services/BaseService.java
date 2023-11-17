@@ -23,6 +23,9 @@ public abstract class BaseService<U extends MainModel> {
                 .collect(Collectors.toList());
     }
 
+    public Optional<U> getEntity(Long id){
+        return getRepo().findById(id);
+    }
 
     public BaseDTO<U> getBy(Long id) {
         Optional<U> entity = getRepo().findById(id);

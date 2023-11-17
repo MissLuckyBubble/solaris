@@ -22,8 +22,6 @@ public class User extends MainModel {
     private String email;
     @Column(name = "IS_ACTIVE")
     private boolean isActive = true;
-    @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
     @Column(name = "LAST_LOGGED_AT")
     private LocalDateTime lastLoggedAt;
     @Column(length = 30)
@@ -33,4 +31,3 @@ public class User extends MainModel {
     @OneToMany(mappedBy = "owner")
     private Set<Article> articles;
 }
-

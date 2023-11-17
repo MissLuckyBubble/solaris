@@ -1,4 +1,7 @@
 package uni.fmi.Solaris.repo;
 
-public interface ArticleRepo {
+import org.springframework.data.jpa.repository.JpaRepository;
+import uni.fmi.Solaris.models.Article;
+
+public interface ArticleRepo extends JpaRepository<Article, Long> {
 }
