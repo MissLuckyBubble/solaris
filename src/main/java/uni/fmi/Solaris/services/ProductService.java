@@ -22,7 +22,6 @@ public class ProductService extends BaseService<Product>{
         return productRepo;
     }
 
-    @Override
     protected Product convertDTOtoModel(BaseDTO<Product> baseDTO) {
         ProductDTO productDTO = (ProductDTO)baseDTO;
         Product product = new Product();
@@ -31,7 +30,6 @@ public class ProductService extends BaseService<Product>{
         return product;
     }
 
-    @Override
     protected void updateEntity(Product entity, BaseDTO<Product> productBaseDTO) {
         ProductDTO productDTO = (ProductDTO)productBaseDTO;
         Product product = getEntity(productDTO.getId()).get();
@@ -54,7 +52,7 @@ public class ProductService extends BaseService<Product>{
         product.setDescription(productDTO.getDescription());
     }
 
-    @Override
+
     protected BaseDTO<Product> convert(Product entity) {
         return new ProductDTO(entity);
     }

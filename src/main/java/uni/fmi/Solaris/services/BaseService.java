@@ -6,6 +6,7 @@ import uni.fmi.Solaris.dto.BaseDTO;
 import uni.fmi.Solaris.dto.CategoryDTO;
 import uni.fmi.Solaris.models.MainModel;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,53 +15,27 @@ import java.util.stream.Collectors;
 public abstract class BaseService<U extends MainModel> {
 
     protected abstract JpaRepository<U,Long> getRepo();
-    public List<BaseDTO<U>> getAll() {
-        List<U> categories = getRepo().findAll();
-
-        return categories
-                .stream()
-                .map(this::convert)
-                .collect(Collectors.toList());
+    public List<U> findAll(){
+        return getRepo().findAll();
     }
-
     public Optional<U> getEntity(Long id){
         return getRepo().findById(id);
     }
 
-    public BaseDTO<U> getBy(Long id) {
-        Optional<U> entity = getRepo().findById(id);
-        //Category byId = categoryRepo.getById(id);
-        final BaseDTO<U> result;
-        if (entity.isPresent()) {
-            result = convert(entity.get());
-        } else {
-            result = null;
-        }
-
-        return result;
+    public U create(U entity) {
+        entity.setCreatedAt(LocalDateTime.now());
+        return getRepo().save(entity);
     }
 
-    public BaseDTO<U> create(BaseDTO<U> baseDTO){
-        U category = convertDTOtoModel(baseDTO);
-        U savedCategory = getRepo().save(category);
-
-        return convert(savedCategory);
-    }
-
-    protected abstract U convertDTOtoModel(BaseDTO<U> baseDTO);
-
-    public BaseDTO<U> update(BaseDTO<U> dto){
-        long id = dto.getId();
+    public U update(U entity){
+        long id = entity.getId();
         Optional<U> optionalEntity = getRepo().findById(id);
         if(optionalEntity.isPresent()){
-            U entity = optionalEntity.get();
-            updateEntity(entity, dto);
-            return convert(getRepo().save(entity));
+            entity.setUpdatedAt(LocalDateTime.now());
+            return getRepo().save(entity);
         }
         return null;
     }
-
-    protected abstract void updateEntity(U entity, BaseDTO<U> categoryDTO);
 
 
     public boolean remove(long id) {
@@ -71,7 +46,5 @@ public abstract class BaseService<U extends MainModel> {
         }
         return false;
     }
-
-    protected abstract BaseDTO<U> convert(U entity);
 }
 

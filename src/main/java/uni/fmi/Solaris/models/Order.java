@@ -21,5 +21,5 @@ public class Order extends MainModel{
     @Enumerated
     private OrderStatus status;
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
-    private List<Order> orders;
+    private List<OrderProduct> orderProducts;
 }

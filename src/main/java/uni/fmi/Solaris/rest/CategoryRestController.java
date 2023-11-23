@@ -1,50 +1,73 @@
 package uni.fmi.Solaris.rest;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uni.fmi.Solaris.dto.BaseDTO;
 import uni.fmi.Solaris.dto.CategoryDTO;
 import uni.fmi.Solaris.models.Category;
 import uni.fmi.Solaris.services.CategoryService;
-import uni.fmi.Solaris.services.ICategoryService;
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping(path = "/category")
 public class CategoryRestController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private CategoryRestController(CategoryService categoryService) {
+    private CategoryRestController(CategoryService categoryService, ModelMapper modelMapper) {
         this.categoryService = categoryService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
-    public List<BaseDTO<Category>> list() {
-        //categoryService.get(12l);
-        return categoryService.getAll();
+    public List<CategoryDTO> list() {
+        List<Category> categories = categoryService.findAll();
+        return categories
+                .stream()
+                .map(this::convertToCategoryDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{categoryId}")
-    public BaseDTO<Category> getCategory(@PathVariable(name = "categoryId") long categoryId) {
-        return categoryService.getBy(categoryId);
+    public CategoryDTO getCategory(@PathVariable(name = "categoryId") long categoryId) {
+
+        Optional<Category> optionalCategory = categoryService.getEntity(categoryId);
+       /* if(optionalCategory.isPresent()){
+            result = convertToCategoryDTO(optionalCategory.get());
+        }else{
+            result = null;
+        }
+        return result;*/
+        return optionalCategory.map(this::convertToCategoryDTO).orElse(null);
+    }
+
+    private CategoryDTO convertToCategoryDTO(Category category) {
+        final CategoryDTO result = modelMapper.map(category, CategoryDTO.class);
+        return result;
     }
 
     @PostMapping()
-    public BaseDTO<Category> create(@RequestBody CategoryDTO newCategory) {
-        return categoryService.create(newCategory);
+    public CategoryDTO create(@RequestBody CategoryDTO newCategory) {
+        Category category = convertCategoryDtoToModel(newCategory);
+        return convertToCategoryDTO(categoryService.create(category));
+    }
+
+    private Category convertCategoryDtoToModel(CategoryDTO newCategory) {
+        Category category = modelMapper.map(newCategory, Category.class);
+        return category;
     }
 
     @PutMapping()
-    public BaseDTO<Category> update(@RequestBody CategoryDTO newCategory) {
-        return categoryService.update(newCategory);
+    public CategoryDTO update(@RequestBody CategoryDTO newCategory) {
+        Category category = convertCategoryDtoToModel(newCategory);
+        return convertToCategoryDTO(categoryService.update(category));
     }
 
     @DeleteMapping(path = "/{categoryId}")

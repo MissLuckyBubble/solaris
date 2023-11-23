@@ -21,7 +21,6 @@ public class UserService extends BaseService<User> {
         return userRepo;
     }
 
-    @Override
     protected User convertDTOtoModel(BaseDTO<User> baseDTO) {
         User user = new User();
         UserDTO userDTO = (UserDTO)baseDTO;
@@ -36,7 +35,7 @@ public class UserService extends BaseService<User> {
         return user;
     }
 
-    @Override
+
     protected void updateEntity(final User entity, BaseDTO<User> baseDTO) {
         UserDTO userDTO = (UserDTO)baseDTO;
         entity.setActive(userDTO.isActive());
@@ -47,7 +46,6 @@ public class UserService extends BaseService<User> {
         entity.setAddress(userDTO.getAddress());
     }
 
-    @Override
     protected BaseDTO<User> convert(User entity) {
         return new UserDTO(entity);
     }

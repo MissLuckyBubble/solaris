@@ -28,71 +28,18 @@ public class RatingService extends BaseService<Rating> {
         return ratingRepo;
     }
 
-    @Override
-    protected Rating convertDTOtoModel(BaseDTO<Rating> baseDTO) {
-        RatingDTO ratingDTO = (RatingDTO) baseDTO;
-        Rating rating = new Rating();
-        mergeRating(ratingDTO, rating);
-        return rating;
-    }
-
-    private void mergeRating(RatingDTO ratingDTO, Rating rating) {
-        final Optional<User> user = userService.getEntity(ratingDTO.getUserId());
-        if (user.isEmpty()) {
-            throw new IllegalStateException("The owner of the rating does not exist!");
-        }
-        final Optional<Product> product = productService.getEntity(ratingDTO.getProductId());
-        if (product.isEmpty()) {
-            throw new IllegalStateException("The product does not exist!");
-        }
-        rating.setUser(user.get());
-        rating.setProduct(product.get());
-        rating.setComment(ratingDTO.getComment());
-        rating.setValue(ratingDTO.getValue());
-    }
-
-    @Override
-    protected void updateEntity(Rating entity, BaseDTO<Rating> categoryDTO) {
-        RatingDTO ratingDTO = (RatingDTO) categoryDTO;
-        mergeRating(ratingDTO, entity);
-    }
-
-    @Override
-    protected BaseDTO<Rating> convert(Rating entity) {
-        return new RatingDTO(entity);
-    }
-
-    public List<RatingDTO> findAllByUserId(long userId) {
+    public List<Rating> findAllByUserId(long userId) {
         Optional<User> entity = userService.getEntity(userId);
-
-/*        if (entity.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        List<Rating> ratings = ratingRepo.findByUser(entity.get());
-        final List<RatingDTO> result = new ArrayList<>();
-        for(Rating rating: ratings){
-            result.add(new RatingDTO(rating));
-        }
-        return result;*/
-
-
-        return ratingRepo.findByUser(entity.orElseThrow())
-                .stream().map(RatingDTO::new)
-                .collect(Collectors.toList());
+        return ratingRepo.findByUser(entity.orElseThrow());
     }
-    public List<RatingDTO> findAllByProductId(long productId) {
+    public List<Rating> findAllByProductId(long productId) {
         Optional<Product> entity = productService.getEntity(productId);
-
-        return ratingRepo.findByProduct(entity.orElseThrow())
-                .stream().map(RatingDTO::new)
-                .collect(Collectors.toList());
+        return ratingRepo.findByProduct(entity.orElseThrow());
     }
 
-    public List<RatingDTO> findAllByProductIdAndUserId(Long productId, Long userId) {
+    public List<Rating> findAllByProductIdAndUserId(Long productId, Long userId) {
         Optional<Product> product = productService.getEntity(productId);
         Optional<User> user = userService.getEntity(userId);
-        return ratingRepo.findByProductAndUser(product.orElseThrow(), user.orElseThrow())
-                .stream().map(RatingDTO::new)
-                .collect(Collectors.toList());
+        return ratingRepo.findByProductAndUser(product.orElseThrow(), user.orElseThrow());
     }
 }
